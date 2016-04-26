@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+    <title> Member Home | Megaphone </title>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/navbar.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/member_home/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/member_home/simple-sidebar.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Amaranth' rel='stylesheet' type='text/css'>
+    <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script src="{% static 'js/subscription.js' %}"></script>
+    <script src="{% static 'js/csrf_token.js' %}"></script>
+    <script src="{% static 'js/searchModal.js' %}"></script>
+    <script src="{% static 'js/formatDate.js' %}"></script>
+
+    <script src="{% static 'js/member_home/member_home.js' %}"></script>
+</head>
+<body>
+<div id="wrapper">
+    <div id="sidebar-wrapper">
+        <ul class="sidebar-nav" style="margin-top: 25px;">
+            <li class="sidebar-brand">
+                <a href="#">
+                    <span class="side-bar-header">Site Management</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="populateModal()" style="font-size: 150%; color: white; line-height: 40px;"> + Subscribe </a>
+            </li>
+            <br>
+            {% for key, values in domain_list.items %}
+            <li>
+                <a href="#" style="font-size: 120%;">
+                    {{ key }}
+                </a>
+                <ul>
+                    {% for page in values %}
+                    <li>
+                        <a href="#">
+                            {{ page }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </li>
+            {% endfor %}
+
+        </ul>
+    </div>
+    <div id="page-content-wrapper">
+        {% include '_navbar.html' with announcement_count=new_announcement_count%}
+        {% include '_search.html' %}
+
+        <div class="container">
+            <div class="block">
+            </div>
+            <br><br><br>
+        </div>
+    </div>
+
+</div>
+
+
+<a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Toggle Menu</a>
+<p> announcement</p>
+{% for key, value in domains_announcement.items %}
+{% if value %}
+<p>Domain: {{key}}</p>
+<p>Announcement: {{value}}</p>
+{% endif %}
+{% endfor %}
+<p> event</p>
+{% for key, values in domains_event.items %}
+<p>Domain: {{key}}</p>
+{% for event in values %}
+{% if event %}
+<p> Event: {{ event.name }} </p>
+{% endif %}
+{% endfor %}
+{% endfor %}
+
+<script>
+    var globals = {
+      noSubscription: {{displaySearchBox|yesno:"true,false"}},
+    };
+
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+
+
+
+
+
+</script>
+
+
+</body>
+</html>

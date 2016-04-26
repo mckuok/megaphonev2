@@ -1,0 +1,198 @@
+
+body {
+    padding-top: 170px;
+    background: url('../member_home/picture/rain_dimmed.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    height: 100vh;
+}
+@media (max-width: 979px) {
+    body {
+        padding-top: 0px;
+    }
+}
+
+
+.block {
+    position: relative;
+    padding: 0 50px 25px 50px;
+    z-index: 3;
+}
+
+
+.block .content {
+    position: relative;
+    z-index: 4;
+    color: black;
+    padding: 0 0px 0 0px;
+}
+
+
+.block .back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: white;
+    border-radius: 30px 30px 30px 30px;
+    opacity: 0.8;
+    z-index: 1;
+}
+
+#new_announcement {
+    width: 100%;
+}
+
+.new-announcement-block {
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+.announcement-title {
+    width: 100%;
+    font-family: 'Amaranth', sans-serif;
+    font-size: 30px;
+    padding: 10px 0px 10px 20px;
+    border-bottom-style: dashed;
+    border-width: 2px;
+    border-radius: 15px 15px 0 0;
+
+    background: rgba(179,220,237,1);
+    background: -moz-linear-gradient(-45deg, rgba(179,220,237,1) 0%, rgba(41,184,229,1) 0%, rgba(188,224,238,1) 100%);
+    background: -webkit-gradient(left top, right bottom, color-stop(0%, rgba(179,220,237,1)), color-stop(0%, rgba(41,184,229,1)), color-stop(100%, rgba(188,224,238,1)));
+    background: -webkit-linear-gradient(-45deg, rgba(179,220,237,1) 0%, rgba(41,184,229,1) 0%, rgba(188,224,238,1) 100%);
+    background: -o-linear-gradient(-45deg, rgba(179,220,237,1) 0%, rgba(41,184,229,1) 0%, rgba(188,224,238,1) 100%);
+    background: -ms-linear-gradient(-45deg, rgba(179,220,237,1) 0%, rgba(41,184,229,1) 0%, rgba(188,224,238,1) 100%);
+    background: linear-gradient(135deg, rgba(179,220,237,1) 0%, rgba(41,184,229,1) 0%, rgba(188,224,238,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3dced', endColorstr='#bce0ee', GradientType=1 );
+}
+
+@media (min-width: 1200px) {
+    .container {
+        width: 800px;
+    }
+}
+
+.subtitle {
+    font-family: 'Amaranth', sans-serif;
+    font-size: 20px;
+    padding: 10px 10px 10px 10px;
+    width: initial;
+    display: inline-block;
+    border-radius: 15px 15px 15px 15px;
+    border-style: dashed;
+    border-width: 2px;
+
+}
+
+.announcement {
+    padding: 20px 0 0 0;
+}
+
+.current-announcement-board {
+    padding: 30px 30px;
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 18px;
+    height: 280px;
+    position: relative;
+}
+
+#current-announcement {
+    font-family: "Times New Roman", Times, serif;
+}
+
+#announcement-board-bg {
+    background-image: url('../member_home/picture/new.png');
+    background-repeat: no-repeat;
+    background-position: top;
+    height: 300px;
+}
+
+#announcement-board-bg:hover #post-announcement-panel {
+    opacity: 1;
+
+}
+
+#current-announcement-date {
+    position:absolute;
+    bottom:0;
+    right:0;
+}
+
+#current-announcement-title {
+    border-bottom: dashed;
+    border-width: 2px;
+}
+
+#new-announcement-title {
+    margin-bottom: 5px;
+}
+
+#history_announcement_button{
+    float: right;
+    padding: 10px 5px 5px 5px;
+    font-size: 16px;
+    cursor:pointer
+}
+
+#new_announcement_button {
+    float: right;
+}
+
+#post-announcement-panel {
+    opacity:0;
+    -webkit-transition:.5s;
+    -moz-transition:.5s;
+    -o-transition:.5s;
+    -ms-transition:.5s;
+    transition:.5s;
+
+    margin-top: -40px;
+    position: absolute;
+    z-index: 100;
+    height: 10%;
+    width: 100%;
+    background: rgba(256, 256, 256, 0.5);
+    text-align: center;
+}
+
+#pop_up_new_announcement_panel {
+    margin-top: 10px;
+    background-color: white;
+    color: black;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.title {
+    padding-bottom: 10px;
+}
+.title a {
+    font-family: 'Amaranth', sans-serif;
+    color: black;
+    font-size: 35px;
+    border-radius: 80px;
+    padding: 15px 15px 15px 15px;
+    border-style: solid;
+    border-width: 2px;
+}
+
+.inactive {
+    background-color: #d9d9d9;
+}
+
+.active {
+    background-color: #ffffff;
+}
+
+.board {
+    border-top: solid;
+    border-width: 2px;
+    padding-top: 20px;
+}

@@ -1,0 +1,119 @@
+
+body {
+    padding-top: 150px;
+    background: url('picture/crowd.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    height: 100vh;
+}
+@media (max-width: 979px) {
+    body {
+        padding-top: 0px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .container {
+        width: 800px;
+    }
+}
+
+.block {
+    position: relative;
+    padding: 25px 15px 25px 15px;
+    z-index: 3;
+}
+
+.title {
+    font-family: 'Bevan', cursive;
+    text-align: center;
+    font-size: 65px;
+    color: white;
+    padding: 0 0 0 0;
+}
+
+.subtitle {
+    font-family: 'Bevan', cursive;
+    text-align: center;
+    font-size: 33px;
+    color: white;
+    padding: 0 0 20px 0;
+}
+
+.block .content {
+    position: relative;
+    z-index: 4;
+    color: black;
+    padding: 0 130px 0 130px;
+}
+
+.block .back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: white;
+    opacity: 0.8;
+    z-index: 1;
+    border-radius: 25px;
+}
+
+.registrationblock {
+    padding-top: 30px;
+    text-align:center;
+}
+
+.label {
+    margin-left: -50px;
+    font-family: 'Amaranth', sans-serif;
+    color: black;
+    font-size: 35px;
+    border-radius: 80px;
+    padding: 5px 15px 5px 15px;
+    border-style: dashed;
+    border-color: black;
+}
+
+.form-block {
+    padding-top: 20px;
+}
+
+.error {
+    font-family: 'Amaranth', sans-serif;
+     font-weight: bold;
+    font-size: 18px;
+    color: #000000;
+}
+
+.login-button {
+    border-radius: 80px;
+    border-style: dashed;
+    border-color: black;
+    font-family: 'Amaranth', sans-serif;
+    font-size: 25px;
+}
+
+.register {
+    padding-top: 10px;
+    font-family: 'Amaranth', sans-serif;
+    font-size: 27px;
+    border-radius: 30px;
+    border-style: solid;
+    border-color: black;
+    background-color: white;
+    margin-left:10px;
+    margin-right:10px;
+    display:inline-block;
+    width: 140px;
+    height: 170px;
+    vertical-align:top;
+    cursor:pointer
+}
+
+.icon_pictures {
+    height: 75px;
+    margin-top: 20px;
+}

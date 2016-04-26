@@ -1,0 +1,44 @@
+<div id="display-event" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" id="event-modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h2 class="modal-title" id="event-level" style="font-family: 'Amaranth', sans-serif; color:white"></h2>
+            </div>
+            <div class="modal-body">
+                <div style="font-size: 130%">
+                    <div style="padding: 0 30px 0 30px">
+                        <h2  id="event-name" ></h2>
+                        <br>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <p><strong>Organizer:</strong> <span id="event-host"></span></p>
+                                <br>
+                                <p><strong>Type of Event:</strong> <span id="event-type"></span></p>
+                            </div>
+                            <div class="col-sm-6">
+                                <p><strong>Location:</strong> <span id="event-location"></span></p>
+                                <br>
+                                <p><strong>Start:</strong> <span id="event-start"></span></p>
+                                <p><strong>End:</strong> <span id="event-end"></span></p>
+                            </div>
+                        </div>
+                        <br>
+                        <p><strong>About:</strong></p>
+                        <p id="event-description"></p>
+                        <br>
+                        <br>
+                        <p style="text-align: right"><!--<strong>Watching:</strong> <span id="event-watchers"></span>-->
+                            <strong>Going:</strong> <span id="event-goers"></span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>

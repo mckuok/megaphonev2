@@ -1,0 +1,35 @@
+{% load staticfiles %}
+<nav class="navbar navbar-default navtop navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header logo-header">
+            <a href="/"><img class="navbar-brand logo" alt="logo" src="{% static 'picture/logo_long.png' %}"></a>
+        </div>
+        {% if user.is_authenticated %}
+        <ul class="nav navbar-nav redirection">
+            <li class="menu-link" ><a id="event-link" href="#">Event</a></li>
+                <li class="menu-link" ><a id="announcement-link" href="#">Announcement {% if announcement_count > 0 %}<span class="new-notification">{{announcement_count}}</span>{% endif %}</a></li>
+        </ul>
+        {% endif %}
+        <ul class="share-buttons">
+            <li><a href="https://www.facebook.com/sharer/sharer.php?u=&t=" title="Share on Facebook"
+                   target="_blank"><img class="icon" src="{% static 'picture/Facebook.png' %}"></a></li>
+            <li><a href="https://twitter.com/intent/tweet?source=&text=:%20" target="_blank" title="Tweet"><img
+                    class="icon" src="{% static 'picture/Twitter.png' %}"></a></li>
+            <li><a href="https://plus.google.com/share?url=" target="_blank" title="Share on Google+"><img
+                    class="icon" src="{% static 'picture/Google+.png' %}"></a></li>
+            <li><a href="mailto:?subject=&body=:%20" target="_blank" title="Email"><img
+                    class="icon" src="{% static 'picture/Email.png' %}"></a></li>
+        </ul>
+    </div>
+</nav>
+<nav class="navbar navbar-default navbottom navbar-fixed-bottom">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <!--<a class="navbar-brand" href="#">WebSiteName</a>-->
+            <p>&nbsp;</p>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a style="opacity: 0.0;">a</a></li>
+        </ul>
+    </div>
+</nav>

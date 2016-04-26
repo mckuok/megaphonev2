@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title> Megaphone </title>
+    {% load staticfiles %}
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Bevan' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Amaranth' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/home/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/navbar.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+</head>
+<body>
+{% include '_navbar.html' %}
+
+<div class="container">
+    <p class="title"> STOP THE CROWD. </p>
+    <p class="subtitle"> Let them know what you have prepared</p>
+    <div class="block">
+        <div class="content">
+            <p class="label"> Log In </p>
+            <div class="form-block">
+                <form role="form" method="post"> {% csrf_token %}
+                    <p class="error"><u>{{ form.non_field_errors.as_text }}</u></p>
+                    {% for field in form %}
+                    <div class="form-group">
+                        <p class="error"><u>{{ field.errors.as_text }}</u></p>
+                        {{ field }}
+                    </div>
+                    {% endfor %}
+                    <input type='submit' value='Log In' class="btn btn-default login-button" style="float: right">
+                </form>
+            </div>
+            <br>
+            <br>
+            <br>
+            <p class="label"> Register </p>
+            <div class="registrationblock">
+                <div class="row">
+                    <div class="register"
+                         onclick="location.href='/register/member'">
+                        <p>Member</p>
+                        <p><img class="icon_pictures" alt="Register as member" src="static/picture/member.png"></p>
+                    </div>
+                    <div class="register" onclick="location.href='/register/page'">
+                        <p>Page</p>
+                        <p><img class="icon_pictures" alt="Register as page" src="static/picture/page.png"></p>
+                    </div>
+                    <div class="register"
+                         onclick="location.href='/register/domain'">
+                        <p>Domain</p>
+                        <p><img class="icon_pictures" alt="Register as domain" src="static/picture/domain.png"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="back"></div>
+    </div>
+</div>
+</body>
+</html>

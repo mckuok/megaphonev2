@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>Domain Admin | Megaphone </title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Bevan' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Amaranth' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="{% static 'js/csrf_token.js' %}"></script>
+    <script src="{% static 'js/minimizeText.js' %}"></script>
+    <script src="{% static 'js/announcements.js' %}"></script>
+    <script src="{% static 'js/formatDate.js' %}"></script>
+    <script src="{% static 'js/domain_home/domain_home.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/domain_home/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/navbar.css' %}">
+</head>
+<body>
+{% include '_navbar.html' %}
+<div class="container">
+    <ul class="list-inline">
+        <li class="title"><a class='active' href="/domainAdmin">Announcement</a></li>
+        <li class="title"><a class='inactive' href="/domainAdmin/event">Event</a></li>
+    </ul>
+    <div class="block">
+        <div class="content">
+            <div class="announcement">
+                <p class="subtitle"> Current Announcement</p>
+                <a id="history_announcement_button" type="button"
+                   onclick="announcementHistoryButton()">
+                    Announcement History </a>
+                <div id="announcement-board-bg">
+                    <div class="current-announcement-board">
+                        <h3 id="current-announcement-title"> {{ current_announcement.title }} </h3>
+                        <p id="current-announcement" class="minimizeCurrent"></p>
+                        <p id="current-announcement-date"> {{ current_announcement.date_created }} </p>
+                    </div>
+                    <div id="post-announcement-panel">
+                        <button id="pop_up_new_announcement_panel" class="btn btn-primary"
+                                data-toggle="modal" data-target="#new_announcement_input_panel"> Make an New
+                            Announcement
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="board">
+                {% if history_announcements %}
+                <p class="subtitle"> 5 Recent Announcements from Pages</p>
+                <div id="announcement-board">
+                    {% for announcement in history_announcements %}
+                    <p> {{ announcement }}</p>
+                    <p> {{ announcement.date_created }}</p>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="subtitle"> No Announcements from Pages under this domain </p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="back"></div>
+    </div>
+
+    {% include '_announcement_history.html' %}
+    {% include '_longtext.html' %}
+    {% include '_newAnnouncement.html' %}
+</div>
+<script>
+    var globals = {
+        current_announcement: "{{ current_announcement.text }}"
+    };
+
+</script>
+
+
+</body>
+</html>

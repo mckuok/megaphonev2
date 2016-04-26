@@ -1,0 +1,26 @@
+<div id="new_announcement_input_panel" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <p class="subtitle"> Make an announcement </p>
+            </div>
+            <div class="modal-body">
+                <div class="new-announcement-block">
+                    <input type="text" id="new-announcement-title" class="form-control" placeholder="Title">
+                    <textarea id="new_announcement"
+                              class="form-control" rows="10" onkeyup="stoppedTyping()"
+                              placeholder="New Announcement"></textarea>
+                    <button id='new_announcement_button' type="button" onclick="postAnnouncementButton()"> Announce
+                    </button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
