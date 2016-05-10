@@ -37,6 +37,6 @@ urlpatterns = [
     url(r'^create/announcement/$', announceView.CreateAnnouncementView.as_view(), name='create an event'),
     url(r'^attend/event/(?P<event_pk>\d+)/$', eventView.GoingEventView.as_view(), name='going to event'),
     url(r'^domain/(?P<domain_pk>\d+)/$', domainView.DomainProfileView.as_view(), name='domain profile'),
-    url(r'^page/(?P<domain_pk>\d+)/$', pageView.PageProfileView.as_view(), name='page profile'),
+    url(r'^page/(?P<page_pk>\d+)/$', pageView.PageProfileView.as_view(), name='page profile'),
     url(r'^admin/', include(admin.site.urls)),
 ]

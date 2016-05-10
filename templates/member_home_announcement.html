@@ -36,11 +36,11 @@
             <br>
             {% for key, values in domain_list.items %}
             <li>
-                <a href="/domain/{{key.pk}}" style="font-size: 120%;">
-                    {{ key.name }}
+                <a href="/domain/{{values.0.1}}" style="font-size: 120%;">
+                    {{ values.0.0 }}
                 </a>
                 <ul>
-                    {% for page in values %}
+                    {% for page in values|slice:"1:" %}
                     <li>
                         <a href="/page/{{page.pk}}">
                             {{ page.name }}

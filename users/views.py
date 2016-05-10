@@ -77,9 +77,10 @@ class MemberHomeEventView(View):
         last_login_date = user.last_access
         event_list = []
         new_events = []
+        j = 0
         for i in range(len(subscribed_domain)):
             domain = Domain.objects.get(pk=subscribed_domain[i])
-            domains[domain] = []
+            domains[j] = [[domain.name, domain.pk]]
 
             current_list = domain.announcements.all().filter(
                 date_created__gte=datetime.now()-timedelta(days=announcement_limit))
@@ -97,11 +98,16 @@ class MemberHomeEventView(View):
                     new_events.append(event)
 
             domains_announcement[domain.name] = current_announcement
+            j += 1
+        print("pre")
+        print(domains)
 
         pages_announcement = {}
         for i in range(len(subscribed_page)):
             page = Page.objects.get(pk=subscribed_page[i])
-            domains[page.domain].append(page)
+            for j in range(len(domains)):
+                if domains[j][0][1] == page.domain.pk:
+                    domains[j].append(page)
 
             current_list = page.announcements.all().filter(
                 date_created__gte=datetime.now()-timedelta(days=announcement_limit))
@@ -137,6 +143,8 @@ class MemberHomeEventView(View):
             is_domainAdmin = True
 
         update_last_login_field(user)
+        print("domains")
+        print(domains)
         return render(request, 'member_home.html', {'displaySearchBox': display_search_box,
                                                     'new_announcement_count': new_announcement_count,
                                                     'event_list': user_event_list,
