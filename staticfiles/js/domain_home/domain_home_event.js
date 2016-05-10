@@ -45,8 +45,8 @@ function allHistoryButton() {
             }).done(function() {
                 text = text.concat(
                 '<div class="single-event"><p class="event-header" type="button" data-toggle="collapse" data-target="#',
-                    name, '_history"> ', name, '</p>',
-                    '<div id="', name, '_history" class="single-event-content collapse">',
+                    pk, '_history"> ', name, '&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-down"></span></p>',
+                    '<div id="', pk, '_history" class="single-event-content collapse">',
                     '<div class="row"><div class="col-sm-6">',
                     '<p><strong>Organizer:</strong> ', page.fields.name, '</p>',
                     '<p><strong>Type of Event:</strong> ', type, '</p>', '</div>',
