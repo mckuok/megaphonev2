@@ -364,6 +364,7 @@ class PageRegistrationView(FormView):
                                        description=page_form.cleaned_data['description'])
             page.save()
             user.subscribe_page = user.subscribe_page + ' ' + str(page.id)
+            user.subscribe_domain = user.subscribe_domain + ' ' + str(page.domain.id)
             user.save()
             return redirect('/pageAdmin/event')
 
