@@ -4,6 +4,7 @@
     {% load static %}
     <meta charset="UTF-8">
     <title>Domain Admin | Megaphone </title>
+    <meta content="width=800, initial-scale=0.7, maximum-scale=1.0, user-scalable=1" name="viewport">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Bevan' rel='stylesheet' type='text/css'>
@@ -15,40 +16,42 @@
     <script src="{% static 'js/domain_home/domain_home_event.js' %}"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'css/domain_home/style2.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/navbar.css' %}">
+
+    <link rel='stylesheet' href="{% static 'fullcalendar/fullcalendar.css' %}">
+    <script src="{% static 'fullcalendar/lib/moment.min.js' %}"></script>
+    <script src="{% static 'fullcalendar/fullcalendar.js' %}">></script>
+
 </head>
 <body>
-{% include '_navbar.html' %}
+{% include '_navbar.html' with show=True name=name is_pageAdmin=is_pageAdmin is_domainAdmin=is_domainAdmin %}
 <div class="container">
-    <ul class="list-inline">
-        <li class="title"><a class='inactive' href="/domainAdmin">Announcement</a></li>
-        <li class="title"><a class='active' href="/domainAdmin/event">Event</a></li>
-    </ul>
+
     <div class="block">
         <div class="content">
             <div class="announcement">
                 <p class="subtitle"> Your Ongoing Events</p>
-                <!--<a id="history_event_button" type="button"
-                   onclick="eventHistoryButton()">
-                    Event History </a>-->
+                    <a style="float:right; cursor: pointer; font-size: 130%; margin-top: 10px;" id="calendar_button" type="button"
+                    data-toggle="modal" data-target="#calendar-modal">
+                    See Calendar </a>
                 <div id="current-event-board">
                     {% for event in ongoing_events %}
                     <div class="single-event">
-                        <p class="event-header"> {{ event.name }} </p>
+                        <p class="event-header"> {{ event.0.name }} </p>
                         <div class="single-event-content">
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <p><strong>Organizer:</strong> {{ event.content_object.name }} </p>
-                                    <p><strong>Type of Event:</strong> {{ event.function }} </p>
+                                    <p><strong>Organizer:</strong> {{ event.0.content_object.name }} </p>
+                                    <p><strong>Type of Event:</strong> {{ event.0.function }} </p>
                                 </div>
                                 <div class="col-sm-6">
-                                    <p><strong>Location:</strong> {{ event.location }} </p>
-                                    <p><strong>Start:</strong> {{ event.date_event }}</p>
-                                    <p><strong>End:</strong> {{ event.date_end }}</p>
+                                    <p><strong>Location:</strong> {{ event.0.location }} </p>
+                                    <p><strong>Start:</strong> {{ event.0.date_event }}</p>
+                                    <p><strong>End:</strong> {{ event.0.date_end }}</p>
                                 </div>
                             </div>
-                            <p><strong>About:</strong> {{ event.description }} </p>
-                            <p class="event-counters"><strong>Watching:</strong> {{ event.watchers }}
-                                <strong>Going:</strong> {{ event.goers }}</p>
+                            <p><strong>About:</strong> {{ event.0.description }} </p>
+                            <p class="event-counters"><!--<strong>Watching:</strong> {{ event.0.watchers }}>-->
+                                <strong>Going:</strong> {{ event.0.goers }}</p>
                         </div>
                     </div>
                     {% endfor %}
@@ -62,14 +65,12 @@
             <br>
             <div class="board">
                 {% if history_events %}
-                <p class="subtitle"> 5 Recent Events from Pages </p>  <a id="allHistoryButton" type="button"
-                                        onclick="allHistoryButton()">
-                                        Sell all </a>
+                <p class="subtitle"> Recent Events from Pages </p>
                 <div id="announcement-board">
                     {% for event in history_events %}
                     <div class="single-event">
-                        <p class="event-header" type="button" data-toggle="collapse" data-target="#{{event.name}}"> {{ event.name }} </p>
-                        <div id="{{ event.name}}" class="single-event-content collapse">
+                        <p class="event-header" style="background-color: #3399ff" type="button" data-toggle="collapse" data-target="#{{event.pk}}"> {{event.content_object.name}}: {{ event.name }} </p>
+                        <div id="{{ event.pk}}" class="single-event-content collapse">
                             <div class="row">
                                 <div class="col-sm-6">
                                     <p><strong>Organizer:</strong> {{ event.content_object.name }} </p>
@@ -99,5 +100,39 @@
 </div>
 {% include '_create_event.html' %}
 {% include '_allHistory.html' %}
+{% include '_calendar.html' %}
+{% include '_event.html '%}
+
+<script>
+    var globals = {
+        event_list: [
+        {% for event in all_events %}
+            {
+                title: '{{ event.name|default_if_none:"Not Provided"  }}',
+                start: '{{ event.date_event|date:"Y-m-d G:i"|default_if_none:"Not Provided" }}',
+                end: '{% ifnotequal event.date "" %}{{ event.date_end|date:"Y-m-d G:i" }}{%else %} Not Provided {% endifnotequal%}',
+                description: '{{ event.description|default_if_none:"Not Provided" }}',
+                host: '{{ event.content_object.name|default_if_none:"Not Provided" }}',
+                watchers: {{ event.watchers }},
+                goers: {{ event.goers }},
+                location: '{{ event.location|default_if_none:"Not Provided" }}',
+                function: '{{ event.function|default_if_none:"Not Provided" }}',
+                color:  {% now "Y-m-d" as todays_date %}
+                        {% if todays_date > event.date_end|date:"Y-m-d" %}
+                            '#8c8c8c'
+                        {% elif event.level == "domain" %}
+                            '#00cc66'
+                        {% else %}
+                            '#3399ff'
+                        {% endif %},
+                level: '{{ event.level }}',
+            },
+        {% endfor %}
+      ],
+
+    }
+
+</script>
+
 </body>
 </html>

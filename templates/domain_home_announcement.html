@@ -3,23 +3,24 @@
 <head>
     {% load static %}
     <meta charset="UTF-8">
-    <title> Page Admin | Megaphone </title>
+    <title>Domain Admin | Megaphone </title>
     <meta content="width=800, initial-scale=0.7, maximum-scale=1.0, user-scalable=1" name="viewport">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Bevan' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Amaranth' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Russo+One|Jockey+One|Acme' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+   <link href='https://fonts.googleapis.com/css?family=Russo+One|Jockey+One|Acme' rel='stylesheet' type='text/css'>
     <script src="{% static 'js/csrf_token.js' %}"></script>
     <script src="{% static 'js/minimizeText.js' %}"></script>
     <script src="{% static 'js/announcements.js' %}"></script>
-    <script src="{% static 'js/page_home/page_home.js' %}"></script>
+    <script src="{% static 'js/formatDate.js' %}"></script>
+    <script src="{% static 'js/domain_home/domain_home.js' %}"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'css/domain_home/style.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/navbar.css' %}">
 </head>
 <body>
-{% include '_navbar.html' with show=True announcement_count=new_announcement_count name=name is_pageAdmin=is_pageAdmin is_domainAdmin=is_domainAdmin%}
+{% include '_navbar.html' with show=True name=name is_pageAdmin=is_pageAdmin is_domainAdmin=is_domainAdmin %}
 <div class="container">
     <div class="block">
         <div class="content">
@@ -43,19 +44,25 @@
                 </div>
             </div>
             <br>
-            {% if domain_announcement %}
-            <p class="subtitle"> Domain Announcement </p>
-            <br><br>
-            <div class="announcement-header" style="background-color: #00cc66;">
-                <p> {{ domain_announcement.content_object.name }}: {{ domain_announcement.title}} </p>
+            <div class="board">
+                {% if history_announcements %}
+                <p class="subtitle"> Recent Announcements from Pages</p>
+                <be>
+                <div id="announcement-board">
+                    {% for announcement in history_announcements %}
+                    <div class="announcement-header" style="background-color: #3399ff;">
+                        <p> {{ announcement.content_object.name }}: {{ announcement.title}} </p>
+                    </div>
+                    <div class="announcement-content">
+                        <p> {{ announcement.text }}</p>
+                        <p style="text-align: right; font-size: 80%;"> {{ announcement.date_created }} </p>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="subtitle"> No Recent Announcements from Pages under this domain </p>
+                {% endif %}
             </div>
-            <div class="announcement-content">
-                <p class="announcement-content-text"> {{ domain_announcement.text }}</p>
-                <p style="text-align: right; font-size: 80%;"> {{ domain_announcement.date_created }} </p>
-            </div>
-            {% else %}
-                <p class="subtitle"> Your Domain has yet to Made an Announcement </p>
-            {% endif %}
         </div>
         <div class="back"></div>
     </div>
@@ -68,7 +75,6 @@
     var globals = {
         current_announcement: "{{ current_announcement.text }}"
     };
-
 
 </script>
 

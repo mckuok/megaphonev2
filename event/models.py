@@ -6,7 +6,7 @@ from django.contrib.contenttypes.models import ContentType
 # Create your models here.
 class Event(models.Model):
     name = models.CharField(max_length=50, default=None)
-    date_created = models.DateTimeField(auto_now=True)
+    date_created = models.DateTimeField(auto_now_add=True)
     date_event = models.DateTimeField(null=True, blank=True, default=None)
     date_end = models.DateTimeField(null=True, blank=True, default=None)
     location = models.CharField(max_length=30, default=None)
@@ -25,3 +25,8 @@ class Event(models.Model):
 
     def __unicode__(self):
         return self.name
+
+
+class EventGoer(models.Model):
+    user = models.ForeignKey('users.User')
+    event = models.ForeignKey(Event)

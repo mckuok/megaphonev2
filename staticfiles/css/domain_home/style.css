@@ -1,7 +1,8 @@
 
 body {
     padding-top: 170px;
-    background: url('../member_home/picture/rain_dimmed.jpg') no-repeat center center fixed;
+    /*background: url('../member_home/picture/rain_dimmed.jpg') no-repeat center center fixed;*/
+    background-color: #e6f2ff;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -108,7 +109,7 @@ body {
 }
 
 #announcement-board-bg {
-    background-image: url('../member_home/picture/new.png');
+    background-image: url('../member_home/picture/new_board.png');
     background-repeat: no-repeat;
     background-position: top;
     height: 300px;
@@ -195,4 +196,33 @@ body {
     border-top: solid;
     border-width: 2px;
     padding-top: 20px;
+}
+
+.announcement-header {
+    color: black;
+    font-family: 'Jockey One', sans-serif;
+    font-size: 27px;
+    line-height: 30px;
+    padding: 2px 20px 1px 20px;
+    width: 95%;
+    margin: auto;
+}
+
+.announcement-content {
+    background-color: white;
+    color: black;
+    font-size: 22px;
+    font-family:Book Antiqua;
+    padding: 10px 20px 10px 20px;
+    width: 95%;
+    margin: auto;
+}
+
+#new_announcement_button {
+    border-color: black;
+    background-color: white;
+    border-width: 1px;
+    font-weight: bold;
+    display: inline-block;
+    text-align: right;
 }

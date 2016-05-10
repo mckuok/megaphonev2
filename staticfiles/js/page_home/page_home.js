@@ -2,6 +2,12 @@ $(document).ready(function() {
     globals.current_announcement = globals.current_announcement.replace(/&lt;br&gt;/g, "<br>");
     document.getElementById('current-announcement').innerHTML = globals.current_announcement;
 
+    $('.announcement-content-text').each(function(i, obj) {
+        var text = obj.innerHTML;
+        text = text.replace(/&lt;br&gt;/g, "<br>");
+        obj.innerHTML = text;
+    });
+
     document.getElementById('new_announcement_button').disabled = true;
     minimizeText('minimizeCurrent', 400);
     $(document).on('mouseenter', '.current-announcement-board   ', function () {

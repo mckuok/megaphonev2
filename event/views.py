@@ -3,7 +3,7 @@ from django.views.generic.edit import View
 from django.http import JsonResponse, HttpResponse
 from django.core import serializers
 
-from .models import Event
+from .models import Event, EventGoer
 from domains.models import Domain
 from pages.models import Page
 
@@ -12,7 +12,6 @@ import json
 
 # Create your views here.
 class CreateEventView(View):
-
 
     def post(self, request, *args, **kwargs):
         dct = json.loads(request.body)
@@ -55,3 +54,16 @@ class GetEventView(View):
             events = events[: count]
 
         return JsonResponse(serializers.serialize('json', events), safe=False)
+
+
+class GoingEventView(View):
+
+    def post(self, request, *args, **kwargs):
+        pk = kwargs['event_pk'].encode('utf-8')
+        event = Event.objects.get(id=pk)
+        event.goers += 1
+        event.save()
+        user = request.user
+        EventGoer.objects.create(user=user, event=event)
+        return HttpResponse('done')
+

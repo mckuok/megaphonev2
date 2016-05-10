@@ -1,6 +1,10 @@
 $(document).ready(function() {
-    $("#event-link").attr("href", "/member/event");
-    $("#announcement-link").attr("href", "/member/announcement");
+    $('.content-text').each(function(i, obj) {
+        var text = obj.innerHTML;
+        text = text.replace(/&lt;br&gt;/g, "<br>");
+        obj.innerHTML = text;
+    });
+
 
     getSubscribedDomains(function() {
         getSubscribedPages(function() {
@@ -53,6 +57,9 @@ function makeCalendar() {
             $('#event-watchers').text(calEvent.watchers);
             $('#event-goers').text(calEvent.goers);
             $('#event-level').text(level);
+            var joinButton = document.getElementById('join-event-button')
+            joinButton.setAttribute("pk", calEvent.pk);
+            joinButton.disabled = calEvent.disable;
             document.getElementById("event-modal-header").style.backgroundColor = calEvent.color;
             $('#display-event').modal();
         }
@@ -63,3 +70,10 @@ function capitalizeFirstLetter(word) {
     return word.charAt(0).toUpperCase() + word.substring(1)
 }
 
+function joinEventButton() {
+    var button = document.getElementById('join-event-button')
+    joinEvent(button.getAttribute("pk"), function() {
+        $('#event-goers').text(parseInt($('#event-goers').text()) + 1);
+    });
+    button.disabled = true;
+}

@@ -3,14 +3,16 @@
 <head>
     {% load static %}
     <title> Member Home | Megaphone </title>
+    <meta content="width=800, initial-scale=0.7, maximum-scale=1.0, user-scalable=1" name="viewport">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" type="text/css" href="{% static 'css/navbar.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/member_home/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/member_home/announcement.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/member_home/simple-sidebar.css' %}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Amaranth' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Russo+One|Jockey+One|Acme' rel='stylesheet' type='text/css'>
     <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     <script src="{% static 'js/subscription.js' %}"></script>
     <script src="{% static 'js/csrf_token.js' %}"></script>
@@ -34,14 +36,14 @@
             <br>
             {% for key, values in domain_list.items %}
             <li>
-                <a href="#" style="font-size: 120%;">
-                    {{ key }}
+                <a href="/domain/{{key.pk}}" style="font-size: 120%;">
+                    {{ key.name }}
                 </a>
                 <ul>
                     {% for page in values %}
                     <li>
-                        <a href="#">
-                            {{ page }}
+                        <a href="/page/{{page.pk}}">
+                            {{ page.name }}
                         </a>
                     </li>
                     {% endfor %}
@@ -52,11 +54,45 @@
         </ul>
     </div>
     <div id="page-content-wrapper">
-        {% include '_navbar.html' with announcement_count=new_announcement_count%}
+        {% include '_navbar.html' with show=True announcement_count=new_announcement_count name=name is_pageAdmin=is_pageAdmin is_domainAdmin=is_domainAdmin%}
         {% include '_search.html' %}
 
         <div class="container">
             <div class="block">
+            {% if domains_announcement.items %}
+                <p class="label"> Domain Announcements </p>
+                {% for key,value in domains_announcement.items %}
+                <div>
+                    <div class="header" style="background-color: #00cc66;">
+                        <p> {{ key }}: {{ value.title}} </p>
+                    </div>
+
+                    <div class="content">
+                        <p class="content-text"> {{ value.text }}</p>
+                        <p style="text-align: right; font-size: 80%;"> {{ value.date_created }} </p>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p class="label"> No New Announcements Were Made from Subscribed Domains </p>
+            {% endif %}
+                    <br>
+                    <br>
+            {% if pages_announcement.items %}
+                <p class="label"> Page Announcements </p>
+                {% for key,value in pages_announcement.items %}
+                    <div class="header" style="background-color: #3399ff;">
+                        <p> {{ key }}: {{ value.title}} </p>
+                    </div>
+
+                    <div class="content">
+                        <p class="content-text"> {{ value.text }}</p>
+                        <p style="text-align: right; font-size: 80%;"> {{ value.date_created }} </p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="label"> No New Announcements Were Made from Subscribed Pages </p>
+            {% endif %}
             </div>
             <br><br><br>
         </div>
@@ -66,22 +102,6 @@
 
 
 <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Toggle Menu</a>
-<p> announcement</p>
-{% for key, value in domains_announcement.items %}
-{% if value %}
-<p>Domain: {{key}}</p>
-<p>Announcement: {{value}}</p>
-{% endif %}
-{% endfor %}
-<p> event</p>
-{% for key, values in domains_event.items %}
-<p>Domain: {{key}}</p>
-{% for event in values %}
-{% if event %}
-<p> Event: {{ event.name }} </p>
-{% endif %}
-{% endfor %}
-{% endfor %}
 
 <script>
     var globals = {

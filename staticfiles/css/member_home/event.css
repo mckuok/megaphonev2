@@ -1,6 +1,7 @@
 body {
     padding-top: 150px;
-    background: url('picture/wall.jpg') no-repeat center center fixed;
+    /*background: url('picture/wall.jpg') no-repeat center center fixed;*/
+    background-color: #e6f2ff;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;

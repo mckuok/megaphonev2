@@ -82,4 +82,70 @@ ul.share-buttons li{
     text-align: center;
     margin-top: 5px;
     margin-left: 10px;
+    display: inline-block;
+}
+
+.logout {
+    background-color: white;
+    border-radius: 10px 10px 10px 10px;
+    padding: 5px 5px 5px 5px;
+    color: black;
+    border-color: black;
+    border-style: solid;
+}
+
+ul.top-right{
+    float: right;
+    list-style: none;
+    margin-top: 50px;
+    color: black;
+
+}
+
+ul.top-right li{
+    display: inline;
+    margin-left: 30px;
+
+}
+
+
+li.dropbtn {
+    display: inline-block;
+    color: black;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li.dropdown {
+    display: inline-block;
+    border-radius: 10px 10px 10px 10px;
+    padding: 5px 5px 5px 5px;
+    color: black;
+    border-color: black;
+    border-style: solid;
+    background-color: white;
+}
+
+.dropdown-content {
+    margin-left: 35px;
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+.dropdown:hover .dropdown-content {
+    display: block;
 }

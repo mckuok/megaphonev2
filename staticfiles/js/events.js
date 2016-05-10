@@ -40,3 +40,19 @@ function postEvent(dictionary, callback) {
         }
     });
 }
+
+function joinEvent(pk, callback) {
+    var url = "/attend/event/" + pk + '/';
+
+    $.ajax({
+        type: "POST",
+        url: url,
+        error : function(xhr,errmsg,err) {
+            alert(xhr.status + ": " + xhr.responseText);
+        }
+    }).done(function() {
+        if (callback) {
+            callback();
+        }
+    });
+}

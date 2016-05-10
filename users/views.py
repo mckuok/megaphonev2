@@ -12,7 +12,7 @@ from domains.models import Domain
 from pages.forms import PageRegistrationForm
 from pages.models import Page
 
-from event.models import Event
+from event.models import EventGoer
 
 from datetime import datetime, timedelta
 
@@ -26,9 +26,8 @@ def update_last_login_field(user):
 class HomeView(FormView):
 
     def get(self, request, *args, **kwargs):
-        logout(request)
         if request.user.is_authenticated():
-            return redirect('/%s' % request.user.role)
+            return redirect('/%s/event' % request.user.role)
         else:
             return render(request, 'home.html', {'form': AuthForm})
 
@@ -37,7 +36,7 @@ class HomeView(FormView):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            return redirect('/%s' % user.role)
+            return redirect('/%s/event' % user.role)
         else:
             return render(request, 'home.html', {'form': form})
 
@@ -54,7 +53,7 @@ class MemberRegistrationView(CreateView):
         user.save()
         authenticated_user = authenticate(username=user.email, password=form.cleaned_data['password2'])
         login(self.request, authenticated_user)
-        return redirect('/member')
+        return redirect('/member/event')
 
 
 class MemberHomeEventView(View):
@@ -76,9 +75,11 @@ class MemberHomeEventView(View):
         announcement_limit = 7
         new_announcement_count = 0
         last_login_date = user.last_access
+        event_list = []
+        new_events = []
         for i in range(len(subscribed_domain)):
             domain = Domain.objects.get(pk=subscribed_domain[i])
-            domains[domain.name] = []
+            domains[domain] = []
 
             current_list = domain.announcements.all().filter(
                 date_created__gte=datetime.now()-timedelta(days=announcement_limit))
@@ -89,12 +90,18 @@ class MemberHomeEventView(View):
             else:
                 current_announcement = None
 
+            domain_event = domain.events.all()
+            for event in domain_event:
+                event_list.append(event)
+                if event.date_created > last_login_date:
+                    new_events.append(event)
+
             domains_announcement[domain.name] = current_announcement
 
         pages_announcement = {}
         for i in range(len(subscribed_page)):
             page = Page.objects.get(pk=subscribed_page[i])
-            domains[page.domain.name].append(page.name)
+            domains[page.domain].append(page)
 
             current_list = page.announcements.all().filter(
                 date_created__gte=datetime.now()-timedelta(days=announcement_limit))
@@ -105,20 +112,41 @@ class MemberHomeEventView(View):
             else:
                 current_announcement = None
 
+            page_event = page.events.all()
+            for event in page_event:
+                event_list.append(event)
+                if event.date_created > last_login_date:
+                    new_events.append(event)
+
             pages_announcement[page.name] = current_announcement
 
-        all_event = Event.objects.all()
-        new_events = all_event.filter(date_created__gte=last_login_date)
-        new_events_count = new_events.count()
+        user_event_list = [];
+        for event in event_list:
+            eventGoer = EventGoer.objects.filter(user=user, event=event)
+            if eventGoer.count() > 0:
+                user_event_list.append([event, True])
+            else:
+                user_event_list.append([event, False])
+
+        is_pageAdmin = False
+        if Page.objects.filter(admin=user).count() > 0:
+            is_pageAdmin = True
+
+        is_domainAdmin = False
+        if Domain.objects.filter(admin=user).count() > 0:
+            is_domainAdmin = True
 
         update_last_login_field(user)
         return render(request, 'member_home.html', {'displaySearchBox': display_search_box,
                                                     'new_announcement_count': new_announcement_count,
-                                                    'event_list': all_event,
+                                                    'event_list': user_event_list,
                                                     'new_event': new_events,
-                                                    'new_events_count': new_events_count,
+                                                    'new_events_count': len(new_events),
                                                     'domain_list': domains,
-                                                    'today': datetime.now()})
+                                                    'today': datetime.now(),
+                                                    'is_member': True,
+                                                    'is_pageAdmin': is_pageAdmin,
+                                                    'is_domainAdmin': is_domainAdmin})
 
 
 class MemberHomeAnnouncementView(View):
@@ -127,6 +155,11 @@ class MemberHomeAnnouncementView(View):
         user = request.user
         domain_list = user.subscribe_domain.strip()
         page_list = user.subscribe_page.strip()
+
+        if domain_list == "":
+            display_search_box = True
+        else:
+            display_search_box = False
 
         subscribed_domain = filter(bool, domain_list.split(' '))
         subscribed_page = filter(bool, page_list.split(' '))
@@ -137,7 +170,7 @@ class MemberHomeAnnouncementView(View):
         last_login_date = user.last_access
         for i in range(len(subscribed_domain)):
             domain = Domain.objects.get(pk=subscribed_domain[i])
-            domains[domain.name] = []
+            domains[domain] = []
 
             current_list = domain.announcements.all().filter(
                 date_created__gte=datetime.now()-timedelta(days=announcement_limit))
@@ -145,15 +178,12 @@ class MemberHomeAnnouncementView(View):
             if current_list.count() > 0:
                 new_announcement_count = new_announcement_count + current_list.filter(date_created__gte=last_login_date).count()
                 current_announcement = current_list.order_by('-date_created')[0]
-            else:
-                current_announcement = None
-
-            domains_announcement[domain.name] = current_announcement
+                domains_announcement[domain.name] = current_announcement
 
         pages_announcement = {}
         for i in range(len(subscribed_page)):
             page = Page.objects.get(pk=subscribed_page[i])
-            domains[page.domain.name].append(page.name)
+            domains[page.domain].append(page)
 
             current_list = page.announcements.all().filter(
                 date_created__gte=datetime.now()-timedelta(days=announcement_limit))
@@ -161,17 +191,26 @@ class MemberHomeAnnouncementView(View):
             if current_list.count() > 0:
                 new_announcement_count = new_announcement_count + current_list.filter(date_created__gte=last_login_date).count()
                 current_announcement = current_list.order_by('-date_created')[0]
-            else:
-                current_announcement = None
+                pages_announcement[page.name] = current_announcement
 
-            pages_announcement[page.name] = current_announcement
+
+        is_pageAdmin = False
+        if Page.objects.filter(admin=user).count() > 0:
+            is_pageAdmin = True
+
+        is_domainAdmin = False
+        if Domain.objects.filter(admin=user).count() > 0:
+            is_domainAdmin = True
 
         update_last_login_field(user)
-        return render(request, 'member_home_announcement.html', {'domains_announcement': domains_announcement,
-                                                    'pages_announcement': pages_announcement,
-                                                    'new_announcement_count': new_announcement_count,
-                                                    'domain_list': domains,
-                                                    'today': datetime.now()})
+        return render(request, 'member_home_announcement.html', {'displaySearchBox': display_search_box,
+                                                                 'domains_announcement': domains_announcement,
+                                                                 'pages_announcement': pages_announcement,
+                                                                 'new_announcement_count': new_announcement_count,
+                                                                 'domain_list': domains,
+                                                                 'is_member': True,
+                                                                 'is_pageAdmin': is_pageAdmin,
+                                                                 'is_domainAdmin': is_domainAdmin})
 
 
 class DomainRegistrationView(FormView):
@@ -238,7 +277,9 @@ class DomainRegistrationView(FormView):
                                            domainID=domain_form.cleaned_data['domainID'],
                                            description=domain_form.cleaned_data['description'])
             domain.save()
-            return redirect('/domainAdmin')
+            user.subscribe_domain = user.subscribe_domain + ' ' + str(domain.id)
+            user.save()
+            return redirect('/domainAdmin/event')
 
         return render(request, 'domain_registration.html', {'auth_form': auth_form,
                                                             'member_form': member_form,
@@ -272,8 +313,8 @@ class PageRegistrationView(FormView):
         warnings = ''
 
         if request.user.is_authenticated():
-            if Domain.objects.filter(admin=request.user).count() > 0:
-                warnings = "<strong> Error: </strong> You can only register one domain per account"
+            if Page.objects.filter(admin=request.user).count() > 0:
+                warnings = "<strong> Error: </strong> You can only register one page per account"
             authenticated = True
         else:
             authenticated = False
@@ -314,7 +355,9 @@ class PageRegistrationView(FormView):
                                        pageID=page_form.cleaned_data['pageID'],
                                        description=page_form.cleaned_data['description'])
             page.save()
-            return redirect('/pageAdmin')
+            user.subscribe_page = user.subscribe_page + ' ' + str(page.id)
+            user.save()
+            return redirect('/pageAdmin/event')
 
         return render(request, 'page_registration.html', {'auth_form': auth_form,
                                                           'member_form': member_form,

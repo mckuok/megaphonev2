@@ -5,11 +5,29 @@
             <a href="/"><img class="navbar-brand logo" alt="logo" src="{% static 'picture/logo_long.png' %}"></a>
         </div>
         {% if user.is_authenticated %}
+        {% if show == True %}
         <ul class="nav navbar-nav redirection">
-            <li class="menu-link" ><a id="event-link" href="#">Event</a></li>
-                <li class="menu-link" ><a id="announcement-link" href="#">Announcement {% if announcement_count > 0 %}<span class="new-notification">{{announcement_count}}</span>{% endif %}</a></li>
+            <li class="menu-link" ><a id="event-link" href="event">Event</a></li>
+            <li class="menu-link" ><a id="announcement-link" href="announcement">Announcement {% if announcement_count > 0 %}<span class="new-notification">{{announcement_count}}</span>{% endif %}</a></li>
         </ul>
         {% endif %}
+
+        <ul class="top-right">
+            {% if show == True %}
+            <li class="dropdown">
+                <a href="#" class="dropbtn"> Switch <img alt="switch" style="width: 50px" src="{% static 'picture/switch.png' %}"> </a>
+                <div class="dropdown-content">
+                    {% if is_member %}<a href="/member/event">Member</a>{% endif %}
+                    {% if is_domainAdmin %}<a href="/domainAdmin/event">Domain</a>{% endif %}
+                    {% if is_pageAdmin %}<a href="/pageAdmin/event">Page</a>{% endif %}
+                </div>
+            </li>
+            {% endif %}
+            <li ><a href="/logout" class="logout"> Log out </a> </li>
+        </ul>
+
+        {% endif %}
+        <!--
         <ul class="share-buttons">
             <li><a href="https://www.facebook.com/sharer/sharer.php?u=&t=" title="Share on Facebook"
                    target="_blank"><img class="icon" src="{% static 'picture/Facebook.png' %}"></a></li>
@@ -19,7 +37,9 @@
                     class="icon" src="{% static 'picture/Google+.png' %}"></a></li>
             <li><a href="mailto:?subject=&body=:%20" target="_blank" title="Email"><img
                     class="icon" src="{% static 'picture/Email.png' %}"></a></li>
-        </ul>
+
+        </ul>-->
+
     </div>
 </nav>
 <nav class="navbar navbar-default navbottom navbar-fixed-bottom">

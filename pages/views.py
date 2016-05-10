@@ -63,27 +63,80 @@ class SubscribePageView(View):
 class PageHomeView(View):
 
     def get(self, request, *args, **kwargs):
-        admin = Page.objects.get(admin=request.user)
-        current_list = admin.announcements.all()
+        page = Page.objects.get(admin=request.user)
+        current_list = page.announcements.all()
         if current_list.count() > 0:
             current_announcement = current_list.order_by('-date_created')[0]
         else:
-            current_announcement = []
+            current_announcement = None
+
+        domain = page.domain
+        domain_announcement = domain.announcements.all()
+        if domain_announcement.count() > 0:
+            domain_announcement = domain_announcement.order_by('-date_created')[0]
+        else:
+            domain_announcement = None
+
+        is_domainAdmin = False
+        if Domain.objects.filter(admin=request.user).count() > 0:
+            is_domainAdmin = True
 
         update_last_login_field(request.user)
-        return render(request, 'page_home.html', {'current_announcement': current_announcement})
+        return render(request, 'page_home.html', {'current_announcement': current_announcement,
+                                                  'domain_announcement': domain_announcement,
+                                                  'is_member': True,
+                                                  'is_pageAdmin': True,
+                                                  'is_domainAdmin': is_domainAdmin})
 
 
 class PageHomeEventView(View):
 
     def get(self, request, *args, **kwargs):
-        admin = Page.objects.get(admin=request.user)
-        current_list = admin.events.all()
+        page = Page.objects.get(admin=request.user)
+        page_list = page.events.all()
+        current_list = page_list.filter(date_event__gte=datetime.now())
+        if current_list.count() > 0:
+            current_list = current_list.order_by('date_event')
+
+        domain = page.domain
+        domain_list = domain.events.all()
+        if domain_list.count() > 0:
+            domain_events = domain_list.filter(date_end__gte=datetime.now())
+        else:
+            domain_events = []
+
+        all_events = []
+        for event in page_list:
+            all_events.append(event)
+        for event in domain_list:
+            all_events.append(event)
+
+        is_domainAdmin = False
+        if Domain.objects.filter(admin=request.user).count() > 0:
+            is_domainAdmin = True
+
+        update_last_login_field(request.user)
+        return render(request, 'page_home_event.html', {'ongoing_events': current_list,
+                                                        'domain_events': domain_events,
+                                                        'all_events': all_events,
+                                                        'is_member': True,
+                                                        'is_pageAdmin': True,
+                                                        'is_domainAdmin': is_domainAdmin})
+
+class PageProfileView(View):
+
+    def get(self, request, *args, **kwargs):
+        pk = kwargs['page_pk'].encode('utf-8')
+        current_list = Page.objects.get(pk=pk).announcements.all()
+        if current_list.count() > 0:
+            current_announcement = current_list.order_by('-date_created')[0]
+        else:
+            current_announcement = None
+
+        current_list = Page.objects.get(pk=pk).events.all()
         current_list = current_list.filter(date_event__gte=datetime.now())
         if current_list.count() > 0:
             current_list = current_list.order_by('date_event')
 
-        return render(request, 'page_home_event.html', {'ongoing_events': current_list})
-
-
-
+        return render(request, 'profile.html', {'current_announcement': current_announcement,
+                                                'current_events': current_list})

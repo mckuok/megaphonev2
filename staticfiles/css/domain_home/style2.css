@@ -1,7 +1,8 @@
 
 body {
     padding-top: 170px;
-    background: url('../member_home/picture/rain_dimmed.jpg') no-repeat center center fixed;
+    /*background: url('../member_home/picture/rain_dimmed.jpg') no-repeat center center fixed;*/
+    background-color: #e6f2ff;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -73,7 +74,6 @@ body {
 }
 
 #announcement-board-bg {
-    background-image: url('../member_home/picture/new.png');
     background-repeat: no-repeat;
     background-position: top;
     height: 300px;
@@ -199,4 +199,8 @@ body {
     border-width: 1px;
     font-weight: bold;
     float: right;
+}
+
+.fc-content {
+    cursor: pointer;
 }

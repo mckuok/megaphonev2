@@ -3,10 +3,11 @@
 <head>
     {% load static %}
     <title> Member Home | Megaphone </title>
+    <meta content="width=800, initial-scale=0.7, maximum-scale=1.0, user-scalable=1" name="viewport">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" type="text/css" href="{% static 'css/navbar.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/member_home/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/member_home/event.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/member_home/simple-sidebar.css' %}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
@@ -16,6 +17,7 @@
     <script src="{% static 'js/csrf_token.js' %}"></script>
     <script src="{% static 'js/searchModal.js' %}"></script>
     <script src="{% static 'js/formatDate.js' %}"></script>
+    <script src="{% static 'js/events.js' %}"></script>
 
     <link rel='stylesheet' href="{% static 'fullcalendar/fullcalendar.css' %}">
     <script src="{% static 'fullcalendar/lib/moment.min.js' %}"></script>
@@ -37,14 +39,14 @@
             <br>
             {% for key, values in domain_list.items %}
             <li>
-                <a href="#" style="font-size: 120%;">
-                    {{ key }}
+                <a href="/domain/{{key.pk}}" style="font-size: 120%;">
+                    {{ key.name }}
                 </a>
                 <ul>
                     {% for page in values %}
                     <li>
-                        <a href="#">
-                            {{ page }}
+                        <a href="/page/{{page.pk}}">
+                            {{ page.name }}
                         </a>
                     </li>
                     {% endfor %}
@@ -55,9 +57,9 @@
         </ul>
     </div>
     <div id="page-content-wrapper">
-        {% include '_navbar.html' with announcement_count=new_announcement_count%}
+        {% include '_navbar.html' with show=True announcement_count=new_announcement_count name=name is_pageAdmin=is_pageAdmin is_domainAdmin=is_domainAdmin %}
         {% include '_search.html' %}
-        {% include '_event.html' %}
+        {% include '_event.html' with joinable=True %}
 
         <div class="container">
             <div class="block">
@@ -99,50 +101,32 @@
     </div>
 
 </div>
-
-
-<a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Toggle Menu</a>
-<p> announcement</p>
-{% for key, value in domains_announcement.items %}
-{% if value %}
-<p>Domain: {{key}}</p>
-<p>Announcement: {{value}}</p>
-{% endif %}
-{% endfor %}
-<p> event</p>
-{% for key, values in domains_event.items %}
-<p>Domain: {{key}}</p>
-{% for event in values %}
-{% if event %}
-<p> Event: {{ event.name }} </p>
-{% endif %}
-{% endfor %}
-{% endfor %}
-
 <script>
     var globals = {
       noSubscription: {{displaySearchBox|yesno:"true,false"}},
       event_list: [
         {% for event in event_list %}
             {
-                title: '{{ event.name|default_if_none:"Not Provided"  }}',
-                start: '{{ event.date_event|date:"Y-m-d G:i"|default_if_none:"Not Provided" }}',
-                end: '{% ifnotequal event.date "" %}{{ event.date_end|date:"Y-m-d G:i" }}{%else %} Not Provided {% endifnotequal%}',
-                description: '{{ event.description|default_if_none:"Not Provided" }}',
-                host: '{{ event.content_object.name|default_if_none:"Not Provided" }}',
-                watchers: {{ event.watchers }},
-                goers: {{ event.goers }},
-                location: '{{ event.location|default_if_none:"Not Provided" }}',
-                function: '{{ event.function|default_if_none:"Not Provided" }}',
+                title: '{{ event.0.name|default_if_none:"Not Provided"  }}',
+                start: '{{ event.0.date_event|date:"Y-m-d G:i"|default_if_none:"Not Provided" }}',
+                end: '{% ifnotequal event.0.date "" %}{{ event.0.date_end|date:"Y-m-d G:i" }}{%else %} Not Provided {% endifnotequal%}',
+                description: '{{ event.0.description|default_if_none:"Not Provided" }}',
+                host: '{{ event.0.content_object.name|default_if_none:"Not Provided" }}',
+                watchers: {{ event.0.watchers }},
+                goers: {{ event.0.goers }},
+                location: '{{ event.0.location|default_if_none:"Not Provided" }}',
+                function: '{{ event.0.function|default_if_none:"Not Provided" }}',
                 color:  {% now "Y-m-d" as todays_date %}
-                        {% if todays_date > event.date_end|date:"Y-m-d" %}
+                        {% if todays_date > event.0.date_end|date:"Y-m-d" %}
                             '#8c8c8c'
-                        {% elif event.level == "domain" %}
+                        {% elif event.0.level == "domain" %}
                             '#00cc66'
                         {% else %}
                             '#3399ff'
                         {% endif %},
-                level: '{{ event.level }}',
+                level: '{{ event.0.level }}',
+                pk: {{ event.0.id }},
+                disable: {{event.1|yesno:"true,false"}},
             },
         {% endfor %}
       ],
